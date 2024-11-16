@@ -25,9 +25,14 @@ USER root
 #==============================
 
 # environment variables for HADOOP
-ENV HADOOP_HOME /usr/local/hadoop-${HADOOP_VERSION_DETAIL}
-ENV HADOOP_PREFIX /usr/local/hadoop-${HADOOP_VERSION_DETAIL}
-ENV HADOOP_CONF_DIR ${HADOOP_HOME}/etc/hadoop/
+ENV HADOOP_HOME=/usr/local/hadoop-${HADOOP_VERSION_DETAIL}
+ENV HADOOP_PREFIX=/usr/local/hadoop-${HADOOP_VERSION_DETAIL}
+ENV HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop/
+ENV HDFS_NAMENODE_USER="root"
+ENV HDFS_DATANODE_USER="root"
+ENV HDFS_SECONDARYNAMENODE_USER="root"
+ENV YARN_NODEMANAGER_USER="root"
+ENV YARN_RESOURCEMANAGER_USER="root"
 
 RUN export HADOOP_INSTALL=$HADOOP_HOME
 RUN export PATH=$PATH:$HADOOP_INSTALL/bin
@@ -38,8 +43,8 @@ RUN export HADOOP_HDFS_HOME=$HADOOP_INSTALL
 RUN export YARN_HOME=$HADOOP_INSTALL
 RUN export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_INSTALL/lib/native
 RUN export HADOOP_OPTS="-Djava.library.path=$HADOOP_INSTALL/lib"
-
-RUN wget http://apache.mirrors.lucidnetworks.net/hadoop/common/hadoop-${HADOOP_VERSION_DETAIL}/hadoop-${HADOOP_VERSION_DETAIL}.tar.gz
+RUN wget -O "hadoop-${HADOOP_VERSION_DETAIL}.tar.gz" "${HADOOP_URL}"
+RUN ls -l
 RUN tar xzf hadoop-*.tar.gz -C /usr/local/
 RUN rm -f hadoop-*.tar.gz 
 
@@ -49,11 +54,11 @@ RUN rm -f hadoop-*.tar.gz
 #==============================
 
 # spark home environments
-ENV SPARK_HOME /usr/local/spark-${SPARK_VERSION_DETAIL}
-ENV SPARK_MASTER_IP localhost
+ENV SPARK_HOME=/usr/local/spark-${SPARK_VERSION_DETAIL}
+ENV SPARK_MASTER_IP=localhost
 
 # download spark
-RUN wget http://d3kbcqa49mib13.cloudfront.net/spark-${SPARK_VERSION_DETAIL}-bin-hadoop${HADOOP_FOR_SPARK_VERSION}.tgz 
+RUN wget -O "spark-${SPARK_VERSION_DETAIL}-bin-hadoop${HADOOP_FOR_SPARK_VERSION}.tgz" "${SPARK_URL}"
 RUN tar xzf spark-*.tgz -C /usr/local
 RUN mv /usr/local/spark-* ${SPARK_HOME}
 RUN rm -f spark-*.tgz 

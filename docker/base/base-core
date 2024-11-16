@@ -13,7 +13,8 @@ RUN \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
-  apt-get install -y git wget curl man unzip vim-tiny bc 
+  apt-get install -y git wget curl man unzip vim-tiny bc  && \
+  apt-get install -y locales
 
 # install ssh server
 RUN \
@@ -79,10 +80,10 @@ ENV PATH $PATH:/usr/local/apache-maven/bin
 ENV HIBENCH_HOME /root/HiBench
 
 # download right version of HiBench
-RUN wget https://github.com/intel-hadoop/HiBench/archive/HiBench-6.0.zip
-RUN unzip HiBench-6.0.zip -d /root/
-RUN mv /root/HiBench-HiBench-6.0 ${HIBENCH_HOME}
-RUN rm -f HiBench-6.0.zip
+RUN wget -O /root/HiBench.zip ${HIBENCH_URL}
+RUN unzip /root/HiBench.zip -d /root/
+RUN mv "/root/$(unzip -Z1 /root/HiBench.zip | head -n 1)" ${HIBENCH_HOME}
+RUN rm -f /root/HiBench.zip
 COPY conf/spark.conf ${HIBENCH_HOME}/conf/
 COPY conf/hadoop.conf ${HIBENCH_HOME}/conf/
 COPY conf/hibench.conf ${HIBENCH_HOME}/conf/
@@ -90,5 +91,5 @@ COPY conf/hibench.conf ${HIBENCH_HOME}/conf/
 # start building HiBench
 RUN apt-get update && apt-get install -y thrift-compiler
 RUN cd ${HIBENCH_HOME} && \
-mvn clean package -Dspark=1.6 -Dscala=2.10
+  mvn clean package -Dspark=${DSPARK_VERSION} -Dscala=${DSCALA_VERSION} 
 
