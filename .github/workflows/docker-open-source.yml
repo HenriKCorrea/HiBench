@@ -1,0 +1,31 @@
+name: Build and Publish Docker Container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+    #   - name: Log in to Docker Hub
+    #     uses: docker/login-action@v1
+    #     with:
+    #       username: ${{ secrets.DOCKER_USERNAME }}
+    #       password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker container
+        run: |
+          chmod +x docker/scripts/run_container.sh
+          docker/scripts/run_container.sh open-source
+
+    #   - name: Push Docker image
+    #     run: |
+    #       docker tag hibench-docker-opensource ${{ secrets.DOCKER_USERNAME }}/hibench-docker-opensource:latest
+    #       docker push ${{ secrets.DOCKER_USERNAME }}/hibench-docker-opensource:latest
