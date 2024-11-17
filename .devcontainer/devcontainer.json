@@ -1,0 +1,11 @@
+{
+  "name": "HiBench Development Container",
+  "image": "henrikcorrea/hibench-docker-opensource:latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [] 
+    }
+  },
+  "postCreateCommand": "rm -rf /root/HiBench && ln -s /workspaces/HiBench /root/HiBench && cp /root/HiBench/docker/base/conf/*.conf /root/HiBench/conf/ ",
+  "remoteUser": "root"
+}
