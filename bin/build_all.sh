@@ -20,4 +20,4 @@ DIR=`cd "${DIR}/.."; pwd`
 
 CURDIR=`pwd`
 cd $DIR
-mvn clean package
+mvn clean package -Dspark=${DSPARK_VERSION} -Dscala=${DSCALA_VERSION}
