@@ -1,0 +1,49 @@
+Generate a PageRank implementation for Apache Spark using Scala. The implementation should:
+
+1. Read input data from a text file where each line contains a URL and its neighbor URL separated by spaces.
+1. Parse the input data to create an RDD of (URL, neighbor URL) pairs.
+1. Group the URLs by their neighbors and initialize each URL's rank to 1.0.
+1. Iterate a specified number of times to update the ranks based on the contributions from neighbor URLs.
+1. Use a damping factor of 0.85 in the rank calculation.
+1. Save the final ranks to an output file.
+1. The code should include necessary imports, handle command-line arguments for input and output file paths, and set up the Spark context.
+
+Additional constraints:
+
+- The application name should be 'CodeLlamaPageRank'.
+- The application should belong to the package org.apache.spark.examples.
+- The object name should be SparkPageRank.
+
+Input arguments:
+
+- input_file: Path to the input text file containing URL and neighbor URL pairs.
+- output_file: Path to the output file where the final ranks will be saved.
+- iterations (optional): Number of iterations to run the PageRank algorithm.
+
+
+
+
+
+
+Generate a PageRank implementation for Apache Spark using Scala. The implementation should:
+
+- Read input data from a text file where each line contains a URL and its neighbor URL separated by spaces.
+- Group the URLs by their neighbors and initialize each URL's rank to 1.0.
+- Use a damping factor of 0.85 in the rank calculation, which includes a random jump factor of 0.15.
+- Use com.intel.hibench.sparkbench.common.IOCommon package to save the final ranks to an output file.
+  - Example usage:
+    -     val io = new IOCommon(ctx)
+    -     io.save(output_path, ranks)     
+
+Additional constraints:
+
+- Declare package org.apache.spark.examples at file beginning.
+- Import dependencies being used.
+- The application name should be 'LLMSparkPageRank'.
+- The object name should be LLMSparkPageRank.
+
+Input arguments:
+
+- args(0): Path to the input text file containing URL and neighbor URL pairs.
+- args(1): Path to the output file where the final ranks will be saved.
+- args(2): (optional): Number of iterations to run the PageRank algorithm.
