@@ -40,72 +40,77 @@ for benchmark in `cat $root_dir/conf/benchmarks.lst`; do
     fi
 
     for framework in `cat $root_dir/conf/frameworks.lst`; do
-    if [[ $framework == \#* ]]; then
-        continue
-    fi
+        if [[ $framework == \#* ]]; then
+            continue
+        fi
 
-    if [ $benchmark == "micro/dfsioe" ] && [ $framework == "spark" ]; then
-        continue
-    fi
-    if [ $benchmark == "micro/repartition" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "websearch/nutchindexing" ] && [ $framework == "spark" ]; then
-        continue
-    fi
-    if [ $benchmark == "graph/nweight" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "graph/pagerank" ] && [ $framework == "hadoop" ]; then
-	    continue
-	  fi
-    if [ $benchmark == "ml/lr" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/als" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/svm" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/pca" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/gbt" ] && [ $framework == "hadoop" ]; then
-         continue
-    fi
-    if [ $benchmark == "ml/rf" ] && [ $framework == "hadoop" ]; then
-          continue
-    fi  
-    if [ $benchmark == "ml/svd" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi      
-    if [ $benchmark == "ml/linear" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/lda" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/gmm" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/correlation" ] && [ $framework == "hadoop" ]; then
-        continue
-    fi
-    if [ $benchmark == "ml/summarizer" ] && [ $framework == "hadoop" ]; then
-         continue
-    fi
+        if [ $benchmark == "micro/dfsioe" ] && [ $framework == "spark" ]; then
+            continue
+        fi
+        if [ $benchmark == "micro/repartition" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "websearch/nutchindexing" ] && [ $framework == "spark" ]; then
+            continue
+        fi
+        if [ $benchmark == "graph/nweight" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "graph/pagerank" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/lr" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/als" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/svm" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/pca" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/gbt" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/rf" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi  
+        if [ $benchmark == "ml/svd" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi      
+        if [ $benchmark == "ml/linear" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/lda" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/gmm" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/correlation" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
+        if [ $benchmark == "ml/summarizer" ] && [ $framework == "hadoop" ]; then
+            continue
+        fi
 
-    echo -e "${UYellow}${BYellow}Run ${Yellow}${UYellow}${benchmark}/${framework}${Color_Off}"
-    echo -e "${BCyan}Exec script: ${Cyan}$WORKLOAD/${framework}/run.sh${Color_Off}"
-    $WORKLOAD/${framework}/run.sh
+        echo -e "${UYellow}${BYellow}Run ${Yellow}${UYellow}${benchmark}/${framework}${Color_Off}"
 
-    result=$?
-    if [ $result -ne 0 ]
-    then
-        echo -e "${On_IRed}ERROR: ${benchmark}/${framework} failed to run successfully.${Color_Off}"
-            exit $result
-    fi
+        WORKLOAD_RUN_DIR="$WORKLOAD/${framework}"
+        RUN_SCRIPT_LIST=("$WORKLOAD_RUN_DIR/run.sh" "$WORKLOAD_RUN_DIR/llm_run.sh")
+        for run_script in "${RUN_SCRIPT_LIST[@]}"; do
+            if [ -f "$run_script" ]; then
+                echo -e "${BCyan}Exec script: ${Cyan}${run_script}${Color_Off}"
+                "$run_script"
+                result="$?"
+                if [ $result -ne 0 ]; then
+                    echo -e "${On_IRed}ERROR: ${benchmark}/${framework} failed to run successfully.${Color_Off}"
+                    exit "$result"
+                fi
+            fi
+        done
     done
 done
 
