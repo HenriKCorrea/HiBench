@@ -1,26 +1,6 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Modified from Spark Naive Bayes example
- */
 package com.intel.hibench.sparkbench.ml
 
-import org.apache.spark.ml.classification.NaiveBayes
+import org.apache.spark.ml.classification.NaiveBayesModel
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.SparkSession
 import scopt.OptionParser
@@ -34,8 +14,8 @@ object LLMNaiveBayesExample {
   def main(args: Array[String]) {
     val defaultParams = Params()
 
-    val parser = new OptionParser[Params]("NaiveBayesExample") {
-      head("NaiveBayesExample: an example Naive Bayes app for parquet dataset.")
+    val parser = new OptionParser[Params]("LLMNaiveBayesExample") {
+      head("LLMNaiveBayesExample: an example Naive Bayes app for parquet dataset.")
       opt[Double]("lambda")
         .text(s"lambda (smoothing constant), default: ${defaultParams.lambda}")
         .action((x, c) => c.copy(lambda = x))
@@ -55,7 +35,7 @@ object LLMNaiveBayesExample {
   def run(params: Params) {
     val spark = SparkSession
       .builder
-      .appName(s"NaiveBayesExample with $params")
+      .appName(s"LLMNaiveBayesExample with $params")
       .getOrCreate()
 
     val df = spark.read.parquet(params.input)
@@ -64,7 +44,7 @@ object LLMNaiveBayesExample {
     val Array(trainingData, testData) = df.randomSplit(Array(0.8, 0.2), seed = 1234L)
 
     // Train a NaiveBayes model.
-    val model = new NaiveBayes().fit(trainingData)
+    val model = trainNaiveBayesModel(trainingData)
 
     // Select example rows to display.
     val predictions = model.transform(testData)
@@ -79,5 +59,17 @@ object LLMNaiveBayesExample {
     println(s"Test set accuracy = $accuracy")
 
     spark.stop()
+  }
+
+  /**
+   * Trains a Naive Bayes model using the provided training data.
+   *
+   * @param trainingData The DataFrame containing the training data. This DataFrame should have
+   *                     features and labels columns where the features column contains the feature
+   *                     vectors and the labels column contains the corresponding labels.
+   * @return The trained Naive Bayes model.
+   */
+  def trainNaiveBayesModel(trainingData: DataFrame): NaiveBayesModel = {
+    // <IMPLEMENT_NAIVE_BAYES>
   }
 }
