@@ -11,12 +11,18 @@ ROOT_DIR="$(cd "${BIN_DIR}/.."; pwd)"
 # # Set docker opensource scripts directory
 DOCKER_OPENSOURCE_SCRIPTS_DIR="${ROOT_DIR}/docker/opensource-docker/scripts"
 
-# Build all benchmarks
+# Restart Hadoop and Spark services
 echo ""
 echo "=================="
-echo "Building all benchmarks..."
+echo "Restarting Hadoop and Spark services..."
 echo "=================="
 echo ""
-"${BIN_DIR}/build_all.sh"
+"${DOCKER_OPENSOURCE_SCRIPTS_DIR}/restart_hadoop_spark.sh"
 
-"${BIN_DIR}/reset_run_all.sh"
+# Run all benchmarks
+echo ""
+echo "=================="
+echo "Running all benchmarks..."
+echo "=================="
+echo ""
+"${BIN_DIR}/run_all.sh"
