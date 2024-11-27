@@ -19,7 +19,7 @@ root_dir=${current_dir}/../../../../../
 workload_config=${root_dir}/conf/workloads/ml/bayes.conf
 . "${root_dir}/bin/functions/load_bench_config.sh"
 
-enter_bench ScalaSparkBayes ${workload_config} ${current_dir}
+enter_bench LLMScalaSparkBayes ${workload_config} ${current_dir}
 show_bannar start
 
 OUTPUT_HDFS=${OUTPUT_HDFS%Output}LLM_Output
@@ -30,7 +30,7 @@ INPUT_PARQUET_FILE=${INPUT_HDFS}.parquet
 
 SIZE=`dir_size $INPUT_PARQUET_FILE`
 START_TIME=`timestamp`
-run_spark_job com.intel.hibench.sparkbench.ml.NaiveBayesExample ${INPUT_PARQUET_FILE}
+run_spark_job com.intel.hibench.sparkbench.ml.LLMNaiveBayesExample ${INPUT_PARQUET_FILE}
 END_TIME=`timestamp`
 
 gen_report ${START_TIME} ${END_TIME} ${SIZE}
